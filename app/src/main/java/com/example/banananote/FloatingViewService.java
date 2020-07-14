@@ -35,6 +35,7 @@ public class FloatingViewService extends Service implements View.OnTouchListener
     private View onTopView;
     private WindowManager manager;
 
+    static boolean isService = false;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -44,7 +45,6 @@ public class FloatingViewService extends Service implements View.OnTouchListener
     @Override
     public void onCreate() {
         super.onCreate();
-
         /*LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         onTopView = inflater.inflate(R.layout.always_on_top_layout, null);
         onTopView.setOnTouchListener(this);
@@ -86,6 +86,12 @@ public class FloatingViewService extends Service implements View.OnTouchListener
 
         //serviceIntent = null;
 
+        if(MainActivity.Stop == 1) {
+            manager.removeView(onTopView);
+            onTopView = null;
+            stopSelf();
+            return;
+        }
         //새로운 시도
 
         //25이하는 알람이 실행되서 무한 루프 걸린다.
@@ -175,6 +181,7 @@ public class FloatingViewService extends Service implements View.OnTouchListener
     }
 
     public void Test() {
+        isService = true;
         int LAYOUT_FLAG;
         if (Build.VERSION.SDK_INT >= 26) { //Build.VERSION_CODES.O
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

@@ -22,7 +22,9 @@ android {
     }
 }
 
-
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -37,5 +39,8 @@ dependencies {
 
     //permission
     //implementation 'gun0912.ted:tedpermission:2.2.3'
+
+    //umarbhatti1 //customDialog
+    implementation 'com.github.umarbhatti1:customdialog:2.10.1'
 
 }

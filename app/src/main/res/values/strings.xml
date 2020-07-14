@@ -94,7 +94,7 @@
 
     <!--activity_menu.xml -->
     <string name="DarkMode">다크모드</string>
-    <string name="Permission">플로팅 허가</string>
+    <string name="Permission">바탕화면 메모</string>
     <string name="Settings">설정</string>
     <string name="Recycle_bin">휴지통</string>
     <string name="Enquire">문의하기</string>

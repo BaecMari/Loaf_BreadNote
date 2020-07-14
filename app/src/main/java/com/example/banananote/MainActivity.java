@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -11,7 +12,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.Manifest;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -39,6 +42,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -72,6 +78,8 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
     Switch Btn_Permission; //플로팅 버튼 허가 해지
 
+    static int Stop = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +98,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         //허가 버튼
         Btn_Permission = findViewById(R.id.switch_Permission);
 
-        //새로운 시도
+        /*//새로운 시도
         if (Settings.canDrawOverlays(MainActivity.this)) {
             if (FloatingViewService.serviceIntent == null) {
                 foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
@@ -99,15 +107,65 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 foregroundServiceIntent = FloatingViewService.serviceIntent;
             }
         } else
-            onObtainingPermissionOverlayWindow();
+            onObtainingPermissionOverlayWindow();*/
+
+        /*//새로운 시도
+        if (Settings.canDrawOverlays(MainActivity.this)) {
+            if (FloatingViewService.serviceIntent == null) {
+                Btn_Permission.setChecked(true);
+                foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
+                startService(foregroundServiceIntent);
+            } else {
+                Btn_Permission.setChecked(false);
+                foregroundServiceIntent = FloatingViewService.serviceIntent;
+            }
+        } else
+            Btn_Permission.setChecked(false);*/
+
+        if(FloatingViewService.isService) Btn_Permission.setChecked(true);
+        else Btn_Permission.setChecked(false);
 
         Btn_Permission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
+                    //새로운 시도
+                    if (Settings.canDrawOverlays(MainActivity.this)) {
+                        foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
+                        startService(foregroundServiceIntent);
+                    } else {
+                        new AwesomeSuccessDialog(MainActivity.this)
+                                .setTitle("빠른 메모")
+                                .setMessage("빠른 메모를 위해 권한이 필요합니다")
+                                .setCancelable(true)
+                                .setPositiveButtonText("허용")
+                                .setNegativeButtonText("취소")
+                                .setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        //새로운 시도
+                                        if (Settings.canDrawOverlays(MainActivity.this)) {
+                                            foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
+                                            startService(foregroundServiceIntent);
+                                        } else {
+                                            onObtainingPermissionOverlayWindow();
+                                        }
+                                    }
+                                })
+                                .setNegativeButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        Btn_Permission.setChecked(false);
+                                    }
+                                }).show();
+                        //onObtainingPermissionOverlayWindow();
+                    }
+
 
                 } else {
-
+                    foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
+                    stopService(foregroundServiceIntent);
+                    Stop = 1;
                 }
             }
         });
@@ -273,6 +331,16 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             }
         });*/
     }
+
+    @Override
+    protected void onStop() {
+        if (!Settings.canDrawOverlays(MainActivity.this)) {
+            if(FloatingViewService.isService) Btn_Permission.setChecked(true);
+            else Btn_Permission.setChecked(false);
+        }
+        super.onStop();
+    }
+
 
     //child 뷰 들이 활성화 비활성화 한다.
     public static void ViewGroup_Enable_Toggle(ViewGroup viewGroup, boolean Enable) {

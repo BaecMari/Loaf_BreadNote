@@ -10,6 +10,8 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(MainActivity.Stop == 1) return;
+
             Intent in = new Intent(context, RestartService.class);
             context.startForegroundService(in);
         } else {
