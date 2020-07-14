@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +17,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -25,12 +28,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.view.View.OnClickListener; //클릭 이벤트
 import android.view.View.OnTouchListener; //터치 이벤트
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +44,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity { //implements OnClickListener
     //상속 OnClick 으로 쓰려다가 일단 햄버거 버튼 하나라서 바로 클릭 이벤트 사용함.
 
     private static final int REQ_CODE_OVERLAY_PERMISSION = 1;
     Intent foregroundServiceIntent;
+    private static final int MESSAGE_PERMISSION_GRANTED = 1111;
+    private static final int MESSAGE_PERMISSION_DENIED = 1112;
 
     //menu 부분
     private DisplayMetrics metrics; //매트릭스로 디스플레이 크기 측정
@@ -62,6 +70,8 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
     private View Frag_Main;
 
+    Switch Btn_Permission; //플로팅 버튼 허가 해지
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +87,13 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         //Light 모드
         //getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
 
+        //허가 버튼
+        Btn_Permission = findViewById(R.id.switch_Permission);
+
         //새로운 시도
-        if (Settings.canDrawOverlays(this)) {
-            if (null == FloatingViewService.serviceIntent) {
-                foregroundServiceIntent = new Intent(this, FloatingViewService.class);
+        if (Settings.canDrawOverlays(MainActivity.this)) {
+            if (FloatingViewService.serviceIntent == null) {
+                foregroundServiceIntent = new Intent(MainActivity.this, FloatingViewService.class);
                 startService(foregroundServiceIntent);
             } else {
                 foregroundServiceIntent = FloatingViewService.serviceIntent;
@@ -88,6 +101,16 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         } else
             onObtainingPermissionOverlayWindow();
 
+        Btn_Permission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked) {
+
+                } else {
+
+                }
+            }
+        });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -46,25 +46,31 @@ android:text="문의하기"/>
         android:visibility="invisible"/>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/Btn_DarkMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/DarkMode" />
 
+    <Switch
+        android:id="@+id/switch_Permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Permission" />
+
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/Btn_Settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Settings" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/Btn_Recycle_bin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Recycle_bin" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/Btn_Enquire"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Enquire" />
