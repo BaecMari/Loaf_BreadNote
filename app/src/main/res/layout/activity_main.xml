@@ -113,13 +113,14 @@
                     app:layout_anchorGravity="bottom|end"
                     app:srcCompat="@android:drawable/ic_dialog_email" /> -->
 
+                <!--bottom -->
 
                 <com.google.android.material.bottomappbar.BottomAppBar
                     android:id="@+id/bottom_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/BottomNavigationBar"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     app:fabAlignmentMode="center"
@@ -127,6 +128,7 @@
                     app:fabCradleVerticalOffset="0dp"
                     app:hideOnScroll="true"
                     app:fabCradleMargin="5dp">
+
 
                     <include
                         android:id="@+id/ic_bottom_menu"
@@ -140,10 +142,10 @@
                     android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@android:color/white"
                     app:fabSize="normal"
                     app:layout_anchor="@id/bottom_bar"
-                    android:src="@drawable/hamburger_button"/>
+                    android:tint="@color/white"
+                    android:src="@drawable/ic_vector_add_64px"/>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <!-- <LinearLayout
@@ -208,7 +210,6 @@
                 android:clickable="true"
                 android:focusable="true"/>
         </RelativeLayout> -->
-
 
 
             <LinearLayout

@@ -33,6 +33,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.view.View.OnClickListener; //클릭 이벤트
@@ -46,6 +47,7 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -83,6 +85,15 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
     //하단 탭
     private TabLayout tabLayout;
+
+    //activity_bottom_menu.xml
+    BottomAppBar bottom_bar;
+    LinearLayout Linear_Main;
+    ImageView Linear_Image_Main;
+    TextView Linear_Text_Main;
+
+    //pager position value
+    int Position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,15 +195,14 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
-        //플로팅버튼
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //FloatingActionButton fab (Add Memo)
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Toast.makeText(MainActivity.this,"메모추가 인텐트로 이동",Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
 
 
 
@@ -246,6 +256,69 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
             }
         });*/
+
+
+        bottom_bar = findViewById(R.id.bottom_bar);
+        Linear_Main = findViewById(R.id.Linear_Main);
+        Linear_Image_Main = findViewById(R.id.Linear_Image_Main);
+        Linear_Text_Main = findViewById(R.id.Linear_Text_Main);
+
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                switch (position) {
+                    case 0:
+                        Position = position;
+                        //Toast.makeText(MainActivity.this,"페이지 1",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Position = position;
+                        //Toast.makeText(MainActivity.this, "페이지 2", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        Position = position;
+                        //Toast.makeText(MainActivity.this, "페이지 3", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+        OnClickListener onClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                switch (view.getId()) {
+                    case R.id.Linear_Main:
+                        pager.setCurrentItem(0);
+                        break;
+                    case R.id.Linear_Image_Main:
+                        pager.setCurrentItem(0);
+                        break;
+                    case R.id.Linear_Text_Main:
+                        pager.setCurrentItem(0);
+                        break;
+                }
+            }
+        };
+
+        Linear_Main.setOnClickListener(onClickListener);
+        Linear_Image_Main.setOnClickListener(onClickListener);
+        Linear_Text_Main.setOnClickListener(onClickListener);
+
+
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main,null,false);
 
@@ -370,7 +443,6 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 }
             }
         });*/
-
     }
 
     @Override
@@ -545,8 +617,6 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
             default:
                 return super.onOptionsItemSelected(item);
-
         }
-
     }
 }

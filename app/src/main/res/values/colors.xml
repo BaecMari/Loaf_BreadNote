@@ -5,4 +5,7 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="TitleBarLightColor">#fff9eb</color>
     <color name="BodyLightColor">#fff9eb</color>
+
+
+    <color name="BottomNavigationBar">#ffdd93</color>
 </resources>
