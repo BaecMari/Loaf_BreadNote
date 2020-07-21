@@ -2,8 +2,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffff"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/MenuPanel"
@@ -29,6 +30,7 @@
 
         android:gravity="left"
         android:orientation="vertical" >
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -111,6 +113,37 @@
                     app:layout_anchorGravity="bottom|end"
                     app:srcCompat="@android:drawable/ic_dialog_email" /> -->
 
+
+                <com.google.android.material.bottomappbar.BottomAppBar
+                    android:id="@+id/bottom_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:backgroundTint="@color/colorAccent"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="5dp"
+                    app:fabAlignmentMode="center"
+                    app:fabCradleRoundedCornerRadius="20dp"
+                    app:fabCradleVerticalOffset="0dp"
+                    app:hideOnScroll="true"
+                    app:fabCradleMargin="5dp">
+
+                    <include
+                        android:id="@+id/ic_bottom_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        layout="@layout/activity_bottom_menu"/>
+
+                </com.google.android.material.bottomappbar.BottomAppBar>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@android:color/white"
+                    app:fabSize="normal"
+                    app:layout_anchor="@id/bottom_bar"
+                    android:src="@drawable/hamburger_button"/>
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
             <!-- <LinearLayout
@@ -142,6 +175,41 @@
                     android:layout_height="wrap_content"
                     android:text="Menu" />
             </RelativeLayout> -->
+
+            <!--bottom -->
+
+            <!--<RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                숨김
+                 <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_alignParentBottom="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                숨김
+             <com.example.banananote.CustomBottomNavigationView
+                android:id="@+id/customBottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorAccent"
+                app:labelVisibilityMode="labeled"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="30dp"
+                android:src="@mipmap/ic_launcher"
+                android:clickable="true"
+                android:focusable="true"/>
+        </RelativeLayout> -->
+
+
 
             <LinearLayout
                 android:id="@+id/Frame_Empty_LinearLayout"

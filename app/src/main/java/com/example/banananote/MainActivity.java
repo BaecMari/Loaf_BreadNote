@@ -48,6 +48,7 @@ import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     Switch Btn_Permission; //플로팅 버튼 허가 해지
 
     static int Stop = 0;
+
+    //하단 탭
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +178,8 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
-        toolBarLayout.setTitle(getTitle());
+        //toolBarLayout.setTitle(getTitle()); //프로젝트명
+        toolBarLayout.setTitle("test");
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
@@ -188,6 +193,21 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                         .setAction("Action", null).show();
             }
         });*/
+
+
+
+        //bottom CustomBottomNavigationView
+        /*CustomBottomNavigationView customBottomNavigationView =
+                findViewById(R.id.customBottomBar);
+        customBottomNavigationView.inflateMenu(R.menu.menu_bottom);*/
+
+        //bottom TabLayout code num = 1
+        /*tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        tabLayout.addTab(tabLayout.newTab().setText("전체"));
+        tabLayout.addTab(tabLayout.newTab().setText("즐겨찾기"));
+        tabLayout.addTab(tabLayout.newTab().setText("폴더"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);*/
+
 
 
         //페이저 기능
@@ -206,6 +226,26 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         adapter.addItem(fragment_folder);
 
         pager.setAdapter(adapter);
+
+
+        //Bottom TabLayout with ViewPager code num = 1
+        /*pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });*/
 
         Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main,null,false);
 
@@ -330,6 +370,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 }
             }
         });*/
+
     }
 
     @Override
@@ -356,7 +397,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             }
         }
     }
-    //이거하니까 매인액티비티 종료되면 같이 종료된다.
+    //매인액티비티 종료되면 같이 종료된다.
 
    /*  @Override
     protected void onDestroy() {
@@ -382,6 +423,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             onObtainingPermissionOverlayWindow();
     }
 
+    //권한
     public void onObtainingPermissionOverlayWindow() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, REQ_CODE_OVERLAY_PERMISSION);
