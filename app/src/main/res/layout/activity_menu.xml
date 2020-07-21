@@ -45,17 +45,17 @@ android:text="문의하기"/>
         android:text="@string/DarkMode"
         android:visibility="invisible"/>
 
-    <Button
-        android:id="@+id/Btn_DarkMode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/DarkMode" />
-
     <Switch
         android:id="@+id/switch_Permission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/Permission" />
+
+    <Button
+        android:id="@+id/Btn_DarkMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/DarkMode" />
 
     <Button
         android:id="@+id/Btn_Settings"

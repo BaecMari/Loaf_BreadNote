@@ -1,31 +1,19 @@
 package com.example.banananote;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import android.Manifest;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,27 +21,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.view.View.OnClickListener; //클릭 이벤트
-import android.view.View.OnTouchListener; //터치 이벤트
 import android.widget.SearchView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity { //implements OnClickListener
     //상속 OnClick 으로 쓰려다가 일단 햄버거 버튼 하나라서 바로 클릭 이벤트 사용함.
@@ -87,10 +67,10 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     private TabLayout tabLayout;
 
     //activity_bottom_menu.xml
-    BottomAppBar bottom_bar;
-    LinearLayout Linear_Main;
-    ImageView Linear_Image_Main;
-    TextView Linear_Text_Main;
+    LinearLayout Linear_ALL;
+    LinearLayout Linear_Favorites;
+    LinearLayout Linear_Tag;
+    LinearLayout Linear_Lock;
 
     //pager position value
     int Position;
@@ -137,7 +117,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         } else
             Btn_Permission.setChecked(false);*/
 
-        if(FloatingViewService.isService) Btn_Permission.setChecked(true);
+        if (FloatingViewService.isService) Btn_Permission.setChecked(true);
         else Btn_Permission.setChecked(false);
 
         Btn_Permission.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -200,10 +180,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this,"메모추가 인텐트로 이동",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
         //bottom CustomBottomNavigationView
@@ -219,10 +198,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);*/
 
 
-
         //페이저 기능
         pager = findViewById(R.id.pager);
-        pager.setOffscreenPageLimit(3); //main,favorites,folder
+        pager.setOffscreenPageLimit(4); //main,favorites,tag,lock
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
@@ -232,9 +210,13 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         Fragment_Favorites fragment_favorites = new Fragment_Favorites();
         adapter.addItem(fragment_favorites);
 
-        Fragment_Folder fragment_folder = new Fragment_Folder();
-        adapter.addItem(fragment_folder);
+        Fragment_Tag fragment_tag = new Fragment_Tag();
+        adapter.addItem(fragment_tag);
 
+        Fragment_Lock fragment_lock = new Fragment_Lock();
+        adapter.addItem(fragment_lock);
+
+        pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
 
@@ -257,12 +239,10 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             }
         });*/
 
-
-        bottom_bar = findViewById(R.id.bottom_bar);
-        Linear_Main = findViewById(R.id.Linear_Main);
-        Linear_Image_Main = findViewById(R.id.Linear_Image_Main);
-        Linear_Text_Main = findViewById(R.id.Linear_Text_Main);
-
+        Linear_ALL = findViewById(R.id.Linear_ALL);
+        Linear_Favorites = findViewById(R.id.Linear_Favorites);
+        Linear_Tag = findViewById(R.id.Linear_Tag);
+        Linear_Lock = findViewById(R.id.Linear_Lock);
 
         pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -286,6 +266,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                         Position = position;
                         //Toast.makeText(MainActivity.this, "페이지 3", Toast.LENGTH_SHORT).show();
                         break;
+                    case 3:
+                        Position = position;
+                        break;
                 }
             }
 
@@ -295,32 +278,34 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             }
         });
 
-
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 switch (view.getId()) {
-                    case R.id.Linear_Main:
-                        pager.setCurrentItem(0);
+                    case R.id.Linear_ALL:
+                        pager.setCurrentItem(0, false);
                         break;
-                    case R.id.Linear_Image_Main:
-                        pager.setCurrentItem(0);
+                    case R.id.Linear_Favorites:
+                        pager.setCurrentItem(1,false);
                         break;
-                    case R.id.Linear_Text_Main:
-                        pager.setCurrentItem(0);
+                    case R.id.Linear_Tag:
+                        pager.setCurrentItem(2, false);
+                        break;
+                    case R.id.Linear_Lock:
+                        pager.setCurrentItem(3, false);
                         break;
                 }
             }
         };
 
-        Linear_Main.setOnClickListener(onClickListener);
-        Linear_Image_Main.setOnClickListener(onClickListener);
-        Linear_Text_Main.setOnClickListener(onClickListener);
+        Linear_ALL.setOnClickListener(onClickListener);
+        Linear_Favorites.setOnClickListener(onClickListener);
+        Linear_Tag.setOnClickListener(onClickListener);
+        Linear_Lock.setOnClickListener(onClickListener);
 
 
-
-        Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main,null,false);
+        Frag_Main = getLayoutInflater().inflate(R.layout.fragment_main, null, false);
 
 
         metrics = new DisplayMetrics(); //메트릭스 객체
@@ -448,7 +433,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     @Override
     protected void onStop() {
         if (!Settings.canDrawOverlays(MainActivity.this)) {
-            if(FloatingViewService.isService) Btn_Permission.setChecked(true);
+            if (FloatingViewService.isService) Btn_Permission.setChecked(true);
             else Btn_Permission.setChecked(false);
         }
         super.onStop();
@@ -461,7 +446,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         for (int i = 0; i < ChildActivity_Count; i++) {
             View view = viewGroup.getChildAt(i);
 
-            if (view.getId() != android.R.id.home ) { //R.id.btn_Menu
+            if (view.getId() != android.R.id.home) { //R.id.btn_Menu
                 view.setEnabled(Enable);
                 if (view instanceof ViewGroup) {
                     ViewGroup_Enable_Toggle((ViewGroup) view, Enable);
@@ -504,6 +489,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     //페이저 기능
     class Tab_PagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> items = new ArrayList<Fragment>();
+
         public Tab_PagerAdapter(FragmentManager fm) {
             super(fm);
         }
