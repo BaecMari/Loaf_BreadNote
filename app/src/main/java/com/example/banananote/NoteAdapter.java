@@ -15,6 +15,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     ArrayList<Note> items = new ArrayList<>();
     OnNoteItemClickListener listener; //뷰 클릭시 여부
 
+    TextView CreateDate;
+
     public void addItem(Note item) {
         items.add(item);
     }
@@ -36,6 +38,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.frag_main_item,parent,false);
+
         return new ViewHolder(itemView, this);
     }
 

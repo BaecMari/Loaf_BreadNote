@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -170,8 +171,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         //toolBarLayout.setTitle(getTitle()); //프로젝트명
-        toolBarLayout.setTitle("test");
-
+        toolBarLayout.setTitle("ALL");
+        getWindow().setStatusBarColor(Color.parseColor("#fff9eb"));
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
@@ -256,18 +258,22 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (position) {
                     case 0:
                         Position = position;
+                        toolBarLayout.setTitle("ALL");
                         //Toast.makeText(MainActivity.this,"페이지 1",Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         Position = position;
+                        toolBarLayout.setTitle("Favorites");
                         //Toast.makeText(MainActivity.this, "페이지 2", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         Position = position;
+                        toolBarLayout.setTitle("Tag");
                         //Toast.makeText(MainActivity.this, "페이지 3", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         Position = position;
+                        toolBarLayout.setTitle("Lock");
                         break;
                 }
             }
