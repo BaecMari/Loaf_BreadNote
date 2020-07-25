@@ -82,7 +82,7 @@ android:text="문의하기"/>
         android:layout_marginTop="250dp"
         android:layout_gravity="center"
         android:textSize="30sp"
-        android:text="식빵 공책" />
+        android:text="Banana note" />
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"

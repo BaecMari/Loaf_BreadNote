@@ -3,6 +3,7 @@ package com.example.banananote;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -434,6 +436,15 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 }
             }
         });*/
+
+
+        View main_cardview;
+        main_cardview = getLayoutInflater().inflate(R.layout.frag_main_item, null,false);
+
+        CheckBox main_checkBox;
+        main_checkBox = main_cardview.findViewById(R.id.main_checkbox);
+
+        main_checkBox.setVisibility(View.VISIBLE);
     }
 
     @Override
