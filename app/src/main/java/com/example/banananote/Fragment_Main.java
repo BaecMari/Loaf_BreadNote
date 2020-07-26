@@ -2,6 +2,7 @@ package com.example.banananote;
 
 import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class Fragment_Main extends Fragment {
     RecyclerView recyclerView;
     NoteAdapter adapter;
 
+    static boolean checked= false;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,7 +32,6 @@ public class Fragment_Main extends Fragment {
 
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,1);
         recyclerView.setLayoutManager(layoutManager);
-
 
         adapter = new NoteAdapter();
 
@@ -74,6 +75,9 @@ public class Fragment_Main extends Fragment {
                 /*CheckBox checkBox;
                 checkBox = view.findViewById(R.id.main_checkbox);
                 if(!checkBox.isChecked()) checkBox.setVisibility(View.VISIBLE);*/
+
+
+                //checked = true;
             }
         });
 
@@ -82,6 +86,7 @@ public class Fragment_Main extends Fragment {
 
         //checkbox , LongClick
 
+        
         return v;
     }
 }

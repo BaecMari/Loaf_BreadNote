@@ -1,6 +1,8 @@
 package com.example.banananote;
 
 import android.animation.ValueAnimator;
+import android.content.ClipData;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.ChoiceFormat;
 import java.util.ArrayList;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements OnNoteItemClickListener {
 
     ArrayList<Note> items = new ArrayList<>();
     OnNoteItemClickListener listener; //뷰 클릭시 여부
+    //static int a = 0;
+    static Boolean Edit_Activation;
 
     public void addItem(Note item) {
         items.add(item);
@@ -113,27 +118,40 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
 
             ValueAnimator valueAnimator = ValueAnimator.ofInt(15);
             valueAnimator.setDuration(400);
+
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if(!main_checkbox.isChecked()) {
-                        main_checkbox.setVisibility(View.VISIBLE);
-                        main_checkbox.setChecked(true);
-                        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            @Override
-                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                layoutParams.setMargins((Integer) valueAnimator.getAnimatedValue(),
-                                        (Integer) valueAnimator.getAnimatedValue(),
-                                        (Integer) valueAnimator.getAnimatedValue(),
-                                        (Integer) valueAnimator.getAnimatedValue());
-                                Main_CardView.requestLayout();
-                            }
-                        });
-                        valueAnimator.start();
-                    }
+
+                    if(main_checkbox.getVisibility() == View.INVISIBLE)
+                        ((MainActivity)MainActivity.context_main).restart();
+
                     return true;
                 }
             });
+
+            Edit_Activation = ((MainActivity)MainActivity.context_main).Edit_Activation;
+
+            if(Edit_Activation) {
+                if(!main_checkbox.isChecked()) {
+                    main_checkbox.setVisibility(View.VISIBLE);
+                    //main_checkbox.setChecked(true);
+
+                    valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            layoutParams.setMargins((Integer) valueAnimator.getAnimatedValue(),
+                                    (Integer) valueAnimator.getAnimatedValue(),
+                                    (Integer) valueAnimator.getAnimatedValue(),
+                                    (Integer) valueAnimator.getAnimatedValue());
+                            Main_CardView.requestLayout();
+                        }
+                    });
+                    valueAnimator.start();
+                }
+            } else {
+                main_checkbox.setVisibility(View.INVISIBLE);
+            }
         }
 
         public void setItem(Note item) {

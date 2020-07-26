@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -78,11 +79,17 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     //pager position value
     int Position;
 
+    ///
+    public static Context context_main;
+    public static Boolean Edit_Activation; //체크박스 활성화
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ///
+        context_main = MainActivity.this;
+        Edit_Activation = false; //기본값 비활성화
         //finish();
         //openView();
         /*if(Build.VERSION.SDK_INT >= 26) {
@@ -293,6 +300,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (view.getId()) {
                     case R.id.Linear_ALL:
                         pager.setCurrentItem(0, false);
+
                         break;
                     case R.id.Linear_Favorites:
                         pager.setCurrentItem(1,false);
@@ -621,5 +629,57 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    protected void restart() {
+
+        /*Intent intent = new Intent(this,MainActivity.class);
+        startActivity(intent);*/
+        Edit_Activation = true;
+
+        //페이저 기능
+
+        Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+
+        Fragment_Main fragment_main = new Fragment_Main();
+        adapter.addItem(fragment_main);
+
+        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
+        adapter.addItem(fragment_favorites);
+
+        Fragment_Tag fragment_tag = new Fragment_Tag();
+        adapter.addItem(fragment_tag);
+
+        Fragment_Lock fragment_lock = new Fragment_Lock();
+        adapter.addItem(fragment_lock);
+
+        pager.setPageTransformer(true, new DepthPageTransformer());
+        pager.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Edit_Activation = false;
+        //페이저 기능
+
+        Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+
+        Fragment_Main fragment_main = new Fragment_Main();
+        adapter.addItem(fragment_main);
+
+        Fragment_Favorites fragment_favorites = new Fragment_Favorites();
+        adapter.addItem(fragment_favorites);
+
+        Fragment_Tag fragment_tag = new Fragment_Tag();
+        adapter.addItem(fragment_tag);
+
+        Fragment_Lock fragment_lock = new Fragment_Lock();
+        adapter.addItem(fragment_lock);
+
+        pager.setPageTransformer(true, new DepthPageTransformer());
+        pager.setAdapter(adapter);
+
+        //super.onBackPressed();
     }
 }
