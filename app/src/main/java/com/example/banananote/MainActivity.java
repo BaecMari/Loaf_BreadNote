@@ -38,6 +38,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity { //implements OnClickListener
     //상속 OnClick 으로 쓰려다가 일단 햄버거 버튼 하나라서 바로 클릭 이벤트 사용함.
@@ -83,10 +84,15 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     public static Context context_main;
     public static Boolean Edit_Activation; //체크박스 활성화
 
+    String a;
+    public static String tag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tag = "multi";
         ///
         context_main = MainActivity.this;
         Edit_Activation = false; //기본값 비활성화
@@ -293,6 +299,8 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
             }
         });
 
+
+
         OnClickListener onClickListener = new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -300,13 +308,19 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (view.getId()) {
                     case R.id.Linear_ALL:
                         pager.setCurrentItem(0, false);
-
+                        fragment_main.selectedClick();
+                        //tag = "single";
+                        //restart();
                         break;
                     case R.id.Linear_Favorites:
                         pager.setCurrentItem(1,false);
+                        //tag = "multi";
+                        //restart();
+
                         break;
                     case R.id.Linear_Tag:
                         pager.setCurrentItem(2, false);
+                        //fragment_main.selectedClick();
                         break;
                     case R.id.Linear_Lock:
                         pager.setCurrentItem(3, false);
@@ -635,6 +649,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
         /*Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);*/
+
         Edit_Activation = true;
 
         //페이저 기능

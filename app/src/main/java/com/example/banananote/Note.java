@@ -5,13 +5,16 @@ public class Note {
     String Title;
     String CreateDate;
     String Memo;
+    boolean isSelected; //checkbox
+
     //String 그림
 
-    public Note(String Title, String CreateDate, String Memo) {
+    /*public Note(String Title, String CreateDate, String Memo) { //, boolean isSelected
         this.Title = Title;
         this.CreateDate = CreateDate;
         this.Memo = Memo;
-    }
+        //this.isSelected = isSelected;
+    }*/
 
     public String getMemo() {
         return Memo;
@@ -35,5 +38,13 @@ public class Note {
 
     public void setTitle(String title) {
         Title = title;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

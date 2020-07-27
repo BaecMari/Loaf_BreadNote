@@ -3,6 +3,7 @@ package com.example.banananote;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,20 +11,27 @@ import android.view.ViewPropertyAnimator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.ChoiceFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> implements OnNoteItemClickListener {
 
-    ArrayList<Note> items = new ArrayList<>();
+    //ArrayList<Note> items = new ArrayList<>();
+    private List<Note> items;
+    private Fragment fragment;
+
     OnNoteItemClickListener listener; //뷰 클릭시 여부
     //static int a = 0;
     static Boolean Edit_Activation;
+
 
     public void addItem(Note item) {
         items.add(item);
@@ -41,6 +49,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         items.set(position,item);
     }
 
+    public NoteAdapter(Fragment fragment, List<Note> itemModels) {
+        this.items = itemModels;
+        this.fragment = fragment;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +63,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         viewHolder.main_checkbox.setVisibility(View.VISIBLE);
         viewHolder.main_checkbox.setChecked(true);
         return  viewHolder;*/
+
         return new ViewHolder(itemView, this);
     }
 
@@ -67,12 +81,50 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Note item = items.get(position);
-        holder.setItem(item);
+        if(MainActivity.tag == "single")
+            holder.setItem(item);
+        else if (MainActivity.tag == "multi")
+            initializeViews(item,holder,position);
+        //initializeViews(item,holder,position);
     }
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    private void initializeViews(final Note item, final NoteAdapter.ViewHolder holder, int position) {
+        holder.textView_Title.setText(item.getTitle());
+        holder.textView_CreateDate.setText(item.getCreateDate());
+        holder.textView_Memo.setText(item.getMemo());
+        holder.main_checkbox.setChecked(item.isSelected());
+        holder.main_checkbox.setTag(position);
+        if(MainActivity.tag == "multi") {
+            holder.main_checkbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CheckBox checkBox = (CheckBox) view;
+                    int ClickedPosition = (Integer) checkBox.getTag();
+                    items.get(ClickedPosition).setSelected(checkBox.isChecked());
+                /*if(listener != null)
+                    listener.onItemClick(holder,checkBox, position);*/
+                    notifyDataSetChanged();
+                }
+            });
+        }
+    }
+
+    public List<Note> getSelectedItem() {
+        List<Note> itemModelList = new ArrayList<>();
+        int i;
+        for (i = 0; i< items.size(); i++) {
+            Note item = items.get(i);
+
+            if(item.isSelected()) {
+                itemModelList.add(item);
+            }
+        }
+        return itemModelList;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -98,40 +150,43 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             ViewGroup.MarginLayoutParams layoutParams =
                     (ViewGroup.MarginLayoutParams) Main_CardView.getLayoutParams();
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int position = getAdapterPosition();
+            if(MainActivity.tag == "single") {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
 
-                    if(listener != null) {
-                        listener.onItemClick(ViewHolder.this, view, position);
+                        if(listener != null) {
+                            listener.onItemClick(ViewHolder.this, view, position);
 
-                        if(main_checkbox.isChecked()) {
-                            main_checkbox.setChecked(false);
-                        }
-                        else {
-                            main_checkbox.setChecked(true);
+                            if(main_checkbox.isChecked()) {
+                                main_checkbox.setChecked(false);
+                            }
+                            else {
+                                main_checkbox.setChecked(true);
+                            }
                         }
                     }
-                }
-            });
+                });
+
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        if(main_checkbox.getVisibility() == View.INVISIBLE) {
+                            MainActivity.tag = "multi";
+                            ((MainActivity)MainActivity.context_main).restart();
+                            //Edit_Activation = true;
+                        }
+
+                        return true;
+                    }
+                });
+            }
 
             ValueAnimator valueAnimator = ValueAnimator.ofInt(15);
             valueAnimator.setDuration(400);
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-
-                    if(main_checkbox.getVisibility() == View.INVISIBLE)
-                        ((MainActivity)MainActivity.context_main).restart();
-
-                    return true;
-                }
-            });
-
             Edit_Activation = ((MainActivity)MainActivity.context_main).Edit_Activation;
-
+            Edit_Activation = true;
             if(Edit_Activation) {
                 if(!main_checkbox.isChecked()) {
                     main_checkbox.setVisibility(View.VISIBLE);
@@ -152,6 +207,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             } else {
                 main_checkbox.setVisibility(View.INVISIBLE);
             }
+
         }
 
         public void setItem(Note item) {
