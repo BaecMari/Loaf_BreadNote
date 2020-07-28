@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tag = "multi";
+        //tag = "multi";
+        tag = "single";
         ///
         context_main = MainActivity.this;
         Edit_Activation = false; //기본값 비활성화
@@ -308,7 +309,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (view.getId()) {
                     case R.id.Linear_ALL:
                         pager.setCurrentItem(0, false);
-                        fragment_main.selectedClick();
+
                         //tag = "single";
                         //restart();
                         break;
@@ -670,6 +671,14 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
+
+        Linear_ALL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(MainActivity.this, "testestestsetests", Toast.LENGTH_SHORT).show();
+                fragment_main.selectedClick();
+            }
+        });
 
     }
 

@@ -3,6 +3,7 @@ package com.example.banananote;
 import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.Intent;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,11 +82,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Note item = items.get(position);
-        if(MainActivity.tag == "single")
+        /*if(MainActivity.tag == "single")
             holder.setItem(item);
         else if (MainActivity.tag == "multi")
-            initializeViews(item,holder,position);
-        //initializeViews(item,holder,position);
+            initializeViews(item,holder,position);*/
+        initializeViews(item,holder,position);
     }
 
     @Override
@@ -100,17 +101,34 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
         holder.main_checkbox.setChecked(item.isSelected());
         holder.main_checkbox.setTag(position);
         if(MainActivity.tag == "multi") {
-            holder.main_checkbox.setOnClickListener(new View.OnClickListener() {
+            /*holder.main_checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     CheckBox checkBox = (CheckBox) view;
                     int ClickedPosition = (Integer) checkBox.getTag();
                     items.get(ClickedPosition).setSelected(checkBox.isChecked());
-                /*if(listener != null)
-                    listener.onItemClick(holder,checkBox, position);*/
+                    //if(listener != null)
+                        //listener.onItemClick(holder,checkBox, position);
                     notifyDataSetChanged();
                 }
+            });*/
+
+            holder.main_checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(holder.main_checkbox.isChecked()) {
+                        int ClickedPosition = (Integer) holder.main_checkbox.getTag();
+                        items.get(ClickedPosition).setSelected(holder.main_checkbox.isChecked());
+                        //notifyDataSetChanged();
+                    } else {
+                        int ClickedPosition = (Integer) holder.main_checkbox.getTag();
+                        items.get(ClickedPosition).setSelected(holder.main_checkbox.isChecked());
+
+                        //notifyDataSetChanged();
+                    }
+                }
             });
+
         }
     }
 
@@ -150,7 +168,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             ViewGroup.MarginLayoutParams layoutParams =
                     (ViewGroup.MarginLayoutParams) Main_CardView.getLayoutParams();
 
+
+
             if(MainActivity.tag == "single") {
+
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -174,11 +195,29 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                     public boolean onLongClick(View view) {
                         if(main_checkbox.getVisibility() == View.INVISIBLE) {
                             MainActivity.tag = "multi";
+                            main_checkbox.setChecked(true);
                             ((MainActivity)MainActivity.context_main).restart();
                             //Edit_Activation = true;
                         }
-
                         return true;
+                    }
+                });
+            } else { //MainActivity.tag == multi
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        int position = getAdapterPosition();
+
+                        if(listener != null) {
+                            //listener.onItemClick(ViewHolder.this, view, position);
+
+                            if(main_checkbox.isChecked()) {
+                                main_checkbox.setChecked(false);
+                            }
+                            else {
+                                main_checkbox.setChecked(true);
+                            }
+                        }
                     }
                 });
             }
@@ -186,7 +225,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
             ValueAnimator valueAnimator = ValueAnimator.ofInt(15);
             valueAnimator.setDuration(400);
             Edit_Activation = ((MainActivity)MainActivity.context_main).Edit_Activation;
-            Edit_Activation = true;
+            //Edit_Activation = true;
             if(Edit_Activation) {
                 if(!main_checkbox.isChecked()) {
                     main_checkbox.setVisibility(View.VISIBLE);

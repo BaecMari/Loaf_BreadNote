@@ -30,14 +30,37 @@ public class Fragment_Main extends Fragment {
 
     static boolean checked= false;
 
-    public  String[] title;
+    //public  String[] title;
 
     public  int i = 0;
     //어댑터 사이즈
 
     int adapter_size = 0;
 
-    String names[] = {"test1","test2","test3"};
+    String Arr_settitle[] = {
+            "test1","test2","test3",
+            "test4","test5","test6",
+            "test7","test8","test9",
+            "test10","test11","test12",
+            "test13","test14","test15",
+            "test16","test17","test18"
+    };
+    String Arr_setCreateDate[] = {
+            "2020-07-21","2020-07-22","2020-07-23",
+            "2020-07-24","2020-07-25","2020-07-26",
+            "2020-07-27","2020-07-28","2020-07-29",
+            "2020-07-30","2020-07-31","2020-07-32",
+            "2020-07-33","2020-07-34","2020-07-35",
+            "2020-07-36","2020-07-37","2020-07-38"
+    };
+    String Arr_setMemo[] = {
+            "테스트 입니다1","테스트입니다2","테스트입니다3",
+            "테스트 입니다4","테스트입니다5","테스트입니다6",
+            "테스트 입니다7","테스트입니다8","테스트입니다9",
+            "테스트 입니다10","테스트입니다11","테스트입니다12",
+            "테스트 입니다13","테스트입니다14","테스트입니다15",
+            "테스트 입니다16","테스트입니다17","테스트입니다18"
+    };
 
     @Nullable
     @Override
@@ -178,11 +201,11 @@ public class Fragment_Main extends Fragment {
     private List<Note> getList() {
         List<Note> list = new ArrayList<>();
 
-        for(int i = 0; i< names.length; i++) {
+        for(int i = 0; i< Arr_settitle.length; i++) {
             Note model = new Note();
-            model.setTitle(names[i]);
-            model.setCreateDate("test");
-            model.setMemo("12341234");
+            model.setTitle(Arr_settitle[i]);
+            model.setCreateDate(Arr_setCreateDate[i]);
+            model.setMemo(Arr_setMemo[i]);
             list.add(model);
         }
 
