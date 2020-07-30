@@ -222,7 +222,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                 });
             }
 
-            ValueAnimator valueAnimator = ValueAnimator.ofInt(15);
+            ValueAnimator valueAnimator = ValueAnimator.ofInt(25);
             valueAnimator.setDuration(400);
             Edit_Activation = ((MainActivity)MainActivity.context_main).Edit_Activation;
             //Edit_Activation = true;
@@ -234,8 +234,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> im
                     valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            layoutParams.setMargins((Integer) valueAnimator.getAnimatedValue(),
-                                    (Integer) valueAnimator.getAnimatedValue(),
+                            layoutParams.setMargins(0,
+                                    0,
                                     (Integer) valueAnimator.getAnimatedValue(),
                                     (Integer) valueAnimator.getAnimatedValue());
                             Main_CardView.requestLayout();
