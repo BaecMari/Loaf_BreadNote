@@ -198,7 +198,9 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -309,7 +311,6 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (view.getId()) {
                     case R.id.Linear_ALL:
                         pager.setCurrentItem(0, false);
-
                         //tag = "single";
                         //restart();
                         break;
@@ -594,7 +595,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                     is_Panel_Expanded = true; //else로 넘기기 위해
                     MainPanel.animate()
                             .x(PanelWidth)
-                            .setDuration(800)
+                            .setDuration(300)
                             .start();
 
                     //매인 레이아웃 안보이게
@@ -616,7 +617,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                         public boolean onTouch(View view, MotionEvent motionEvent) {
                             MainPanel.animate()
                                     .x(0)
-                                    .setDuration(800)
+                                    .setDuration(300)
                                     .start();
                             is_Panel_Expanded = false;
 
@@ -636,7 +637,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 } else {
                     MainPanel.animate()
                             .x(0)
-                            .setDuration(800)
+                            .setDuration(300)
                             .start();
                 }
                 return true;

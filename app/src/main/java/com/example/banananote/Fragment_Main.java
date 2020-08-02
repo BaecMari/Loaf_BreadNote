@@ -1,6 +1,7 @@
 package com.example.banananote;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +27,11 @@ public class Fragment_Main extends Fragment {
     NoteAdapter adapter;
     Note_MultiSelectionAdapter multi_adapter;
 
-
+    ///
+    public static Fragment_Main context_Frag_Main;
+    public String Title;
+    public String CreateDate;
+    public String Memo;
 
     static boolean checked= false;
 
@@ -66,8 +71,7 @@ public class Fragment_Main extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
-
+        context_Frag_Main = Fragment_Main.this;
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
 
@@ -177,7 +181,15 @@ public class Fragment_Main extends Fragment {
             @Override
             public void onItemClick(NoteAdapter.ViewHolder holder, View view, int position) {
                 Note item = adapter.getItem(position);
+                Title = item.getTitle();
+                CreateDate = item.getCreateDate();
+                Memo = item.getMemo();
                 Toast.makeText(getContext(), "아이템 선택됨: " + item.getTitle(), Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent(getContext(),NoteAddActivity.class);
+                startActivity(intent);
+
+
                 //CheckBox checkBox;
                 //checkBox = view.findViewById(R.id.main_checkbox);
                 //if(!checkBox.isChecked()) checkBox.setVisibility(View.VISIBLE);
