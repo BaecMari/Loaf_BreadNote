@@ -2,6 +2,8 @@ package com.example.banananote;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +36,14 @@ public class Fragment_Main extends Fragment {
     public String Memo;
 
     static boolean checked= false;
+
+    ///
+    public static String[] Arr_ID = {};
+    public static String[] Arr_TITLE = {};
+    public static String[] Arr_CREATE_DATE = {};
+    public static String[] Arr_CONTENTS_MEMO = {};
+    public static String[] Arr_isFAVORITE = {};
+    public static String[] Arr_WHICH_FOLDER = {};
 
     //public  String[] title;
 
@@ -74,6 +84,8 @@ public class Fragment_Main extends Fragment {
         context_Frag_Main = Fragment_Main.this;
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+
+        QUERY_NOTE();
 
         List<Note> list = getList();
 
@@ -175,6 +187,7 @@ public class Fragment_Main extends Fragment {
         //싱글 선택 어댑터
         adapter = new NoteAdapter(this,list);
 
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new OnNoteItemClickListener() {
@@ -186,7 +199,7 @@ public class Fragment_Main extends Fragment {
                 Memo = item.getMemo();
                 Toast.makeText(getContext(), "아이템 선택됨: " + item.getTitle(), Toast.LENGTH_LONG).show();
 
-                Intent intent = new Intent(getContext(),NoteAddActivity.class);
+                Intent intent = new Intent(getContext(),NoteShowActivity.class);
                 startActivity(intent);
 
 
@@ -210,14 +223,62 @@ public class Fragment_Main extends Fragment {
         return v;
     }
 
+    public void QUERY_NOTE() {
+        int i = 0;
+
+        try {
+            String uriString = "content://com.example.banananote/Note";
+            Uri uri = new Uri.Builder().build().parse(uriString);
+
+            String[] columns = new String[] {"id","title","createDate","contentsMemo","isFavorite","whichFolder"};
+            Cursor cursor = getContext().getContentResolver().query(uri, columns, null, null, "id ASC");
+            Log.e("Fragment_Main.java","QUERY 결과 : " + cursor.getCount());
+            int columns_count = cursor.getCount();
+
+            int index = 1;
+            Arr_ID = new String[columns_count];
+            Arr_TITLE = new String[columns_count];
+            Arr_CREATE_DATE = new String[columns_count];
+            Arr_CONTENTS_MEMO = new String[columns_count];
+            Arr_isFAVORITE = new String[columns_count];
+            Arr_WHICH_FOLDER = new String[columns_count];
+
+            while (cursor.moveToNext()) { //출력
+                String id = cursor.getString(cursor.getColumnIndex(columns[0]));
+                String title = cursor.getString(cursor.getColumnIndex(columns[1]));
+                String createDate = cursor.getString(cursor.getColumnIndex(columns[2]));
+                String contentsMemo = cursor.getString(cursor.getColumnIndex(columns[3]));
+                String isFavorite = cursor.getString(cursor.getColumnIndex(columns[4]));
+                String which_folder = cursor.getString(cursor.getColumnIndex(columns[5]));
+
+                Arr_ID[i] = id;
+                Arr_TITLE[i] = title;
+
+                createDate = createDate.substring(0,11);
+                Arr_CREATE_DATE[i] = createDate;
+
+                Arr_CONTENTS_MEMO[i] = contentsMemo;
+                Arr_isFAVORITE[i] = isFavorite;
+                Arr_WHICH_FOLDER[i] = which_folder;
+
+                Log.e("Fragment_Main.java", "레코드 " + index + " : " + id + ", " + title + ", " + createDate + ", " +
+                        contentsMemo + ", " + isFavorite + ", " + which_folder );
+                index += 1;
+                i+=1;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private List<Note> getList() {
         List<Note> list = new ArrayList<>();
 
-        for(int i = 0; i< Arr_settitle.length; i++) {
+        for(int i = 0; i< Arr_TITLE.length; i++) {
             Note model = new Note();
-            model.setTitle(Arr_settitle[i]);
-            model.setCreateDate(Arr_setCreateDate[i]);
-            model.setMemo(Arr_setMemo[i]);
+            model.setTitle(Arr_TITLE[i]);
+            model.setCreateDate(Arr_CREATE_DATE[i]);
+            model.setMemo(Arr_CONTENTS_MEMO[i]);
             list.add(model);
         }
 

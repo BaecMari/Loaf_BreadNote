@@ -84,8 +84,12 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
     public static Context context_main;
     public static Boolean Edit_Activation; //체크박스 활성화
 
-    String a;
     public static String tag;
+
+    public FloatingActionButton fab;
+
+    //Memo 추가액티비티 - > 메모 보기 액티비티
+    public static int save = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,12 +198,14 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
 
         //FloatingActionButton fab (Add Memo)
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
             }
         });
@@ -318,7 +324,6 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                         pager.setCurrentItem(1,false);
                         //tag = "multi";
                         //restart();
-
                         break;
                     case R.id.Linear_Tag:
                         pager.setCurrentItem(2, false);
@@ -462,13 +467,13 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         });*/
 
 
-        View main_cardview;
+        /*View main_cardview;
         main_cardview = getLayoutInflater().inflate(R.layout.frag_main_item, null,false);
 
         CheckBox main_checkBox;
         main_checkBox = main_cardview.findViewById(R.id.main_checkbox);
 
-        main_checkBox.setVisibility(View.VISIBLE);
+        main_checkBox.setVisibility(View.VISIBLE);*/
     }
 
     @Override
@@ -657,6 +662,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         //페이저 기능
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
+        adapter.notifyDataSetChanged();
 
         Fragment_Main fragment_main = new Fragment_Main();
         adapter.addItem(fragment_main);
@@ -673,7 +679,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        Linear_ALL.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(MainActivity.this, "testestestsetests", Toast.LENGTH_SHORT).show();
@@ -685,8 +691,23 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
 
     @Override
     public void onBackPressed() {
-        Edit_Activation = false;
+        if(!Edit_Activation) {
+            super.onBackPressed();
+        } else {
+            //((MainActivity)MainActivity.context_main).restart();
+            //onRestart();
+            Edit_Activation = false;
+            onRestart();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        //Toast.makeText(context_main, "test", Toast.LENGTH_SHORT).show();
         //페이저 기능
+
+        tag = "single";
 
         Tab_PagerAdapter adapter = new Tab_PagerAdapter(getSupportFragmentManager());
 
@@ -702,9 +723,20 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
         Fragment_Lock fragment_lock = new Fragment_Lock();
         adapter.addItem(fragment_lock);
 
+        adapter.notifyDataSetChanged();
+
         pager.setPageTransformer(true, new DepthPageTransformer());
         pager.setAdapter(adapter);
 
-        //super.onBackPressed();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(MainActivity.this, "메모추가 인텐트로 이동", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), NoteAddActivity.class);
+                save = 1;
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+            }
+        });
     }
 }
