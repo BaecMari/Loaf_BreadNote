@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity { //implements OnClickListen
                 switch (position) {
                     case 0:
                         Position = position;
-                        toolBarLayout.setTitle("ALL");
+                        toolBarLayout.setTitle("전체");
                         //Toast.makeText(MainActivity.this,"페이지 1",Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
