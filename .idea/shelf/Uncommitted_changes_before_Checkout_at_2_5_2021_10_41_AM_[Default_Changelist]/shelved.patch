@@ -1,0 +1,18 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision 4361b61e496ae7a68c0ce3753a13414377a6a054)
++++ .idea/modules.xml	(revision 4361b61e496ae7a68c0ce3753a13414377a6a054)
+@@ -1,9 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ProjectModuleManager">
+-    <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BananaNote.iml" filepath="$PROJECT_DIR$/.idea/modules/BananaNote.iml" />
+-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/BananaNote.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/BananaNote.app.iml" />
+-    </modules>
+-  </component>
+-</project>
+\ No newline at end of file
